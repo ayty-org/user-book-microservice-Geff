@@ -1,0 +1,1 @@
+INSERT INTO library_user (name, age, telephone) values ('Gefferson Vieira' , 22, '83 9 9348-8354');
