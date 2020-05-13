@@ -20,9 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(builderClassName = "Builder")
-public class LibraryBookDTO implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class LibraryBookDTO {
 
     private Long id;
 

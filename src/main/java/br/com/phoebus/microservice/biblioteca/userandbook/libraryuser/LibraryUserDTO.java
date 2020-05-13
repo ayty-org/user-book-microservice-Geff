@@ -20,8 +20,6 @@ import java.util.List;
 @Builder(builderClassName = "Builder")
 public class LibraryUserDTO {
 
-    private static final Long serialVersionUID = 1L;
-
     private Long id;
 
     @NotEmpty(message = "Name may is not be empty")
