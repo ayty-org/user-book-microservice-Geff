@@ -33,6 +33,8 @@ public class LibraryBook implements Serializable {
     @Column(name = "book_id")
     private Long id;
 
+    private boolean borrowed;
+
     private String title;
 
     private String resume;
@@ -46,6 +48,7 @@ public class LibraryBook implements Serializable {
     public static LibraryBook to(LibraryBookDTO libraryBookDTO) {
         return LibraryBook.builder()
                 .id(libraryBookDTO.getId())
+                .borrowed(libraryBookDTO.isBorrewed())
                 .title(libraryBookDTO.getTitle())
                 .resume(libraryBookDTO.getResume())
                 .isbn(libraryBookDTO.getIsbn())

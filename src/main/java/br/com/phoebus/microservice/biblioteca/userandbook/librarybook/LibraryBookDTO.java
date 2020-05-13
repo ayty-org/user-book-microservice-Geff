@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,6 +24,9 @@ import java.util.List;
 public class LibraryBookDTO {
 
     private Long id;
+
+    @NotNull
+    private boolean borrewed;
 
     @NotEmpty(message = "Title may not be empty")
     private String title;
@@ -43,6 +47,7 @@ public class LibraryBookDTO {
     public static LibraryBookDTO from(LibraryBook libraryBook) {
         return LibraryBookDTO.builder()
                 .id(libraryBook.getId())
+                .borrewed(libraryBook.isBorrowed())
                 .title(libraryBook.getTitle())
                 .resume(libraryBook.getResume())
                 .isbn(libraryBook.getIsbn())
