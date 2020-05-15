@@ -33,12 +33,15 @@ public class LibraryUserDTO {
     @Size(min = 8)
     private String telephone;
 
+    private String specificId;
+
     public static LibraryUserDTO from(LibraryUser libraryUser) {
         return LibraryUserDTO.builder()
                 .id(libraryUser.getId())
                 .age(libraryUser.getAge())
                 .name(libraryUser.getName())
                 .telephone(libraryUser.getTelephone())
+                .specificId(libraryUser.getSpecificId())
                 .build();
     }
 

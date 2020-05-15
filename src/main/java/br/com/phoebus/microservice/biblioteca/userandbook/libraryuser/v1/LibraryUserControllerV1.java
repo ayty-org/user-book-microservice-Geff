@@ -3,6 +3,7 @@ package br.com.phoebus.microservice.biblioteca.userandbook.libraryuser.v1;
 import br.com.phoebus.microservice.biblioteca.userandbook.libraryuser.LibraryUserDTO;
 import br.com.phoebus.microservice.biblioteca.userandbook.libraryuser.service.DeleteLibraryUserService;
 import br.com.phoebus.microservice.biblioteca.userandbook.libraryuser.service.EditLibraryUserService;
+import br.com.phoebus.microservice.biblioteca.userandbook.libraryuser.service.EditSpecificIdLibraryUserService;
 import br.com.phoebus.microservice.biblioteca.userandbook.libraryuser.service.GetLibraryUserService;
 import br.com.phoebus.microservice.biblioteca.userandbook.libraryuser.service.ListLibraryUserService;
 import br.com.phoebus.microservice.biblioteca.userandbook.libraryuser.service.ListPageLibraryuserService;
@@ -31,6 +32,7 @@ public class LibraryUserControllerV1 {
 
     private final DeleteLibraryUserService deleteLibraryUserService;
     private final EditLibraryUserService editLibraryUserService;
+    private final EditSpecificIdLibraryUserService editSpecificIdLibraryUserService;
     private final GetLibraryUserService getLibraryUserService;
     private final ListLibraryUserService listLibraryUserService;
     private final ListPageLibraryuserService listPageLibraryuserService;
@@ -46,6 +48,12 @@ public class LibraryUserControllerV1 {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void editLibraryUser(@Valid @PathVariable(value = "id") Long id, @RequestBody LibraryUserDTO libraryUserDTO) {
         editLibraryUserService.editLibraryUser(id, libraryUserDTO);
+    }
+
+    @PutMapping(value = "/editSpecific/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void editLibraryUserSpecificId(@Valid @PathVariable(value = "id") Long id, @RequestBody String specificId) {
+        editSpecificIdLibraryUserService.editSpecifIdLibraryUser(id, specificId);
     }
 
     @GetMapping("/{id}")

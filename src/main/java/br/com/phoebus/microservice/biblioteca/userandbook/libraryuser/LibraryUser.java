@@ -38,12 +38,15 @@ public class LibraryUser implements Serializable {
 
     private String telephone;
 
+    private String specificId;
+
     public static LibraryUser to(LibraryUserDTO libraryUserDTO) {
         return LibraryUser.builder()
                 .id(libraryUserDTO.getId())
                 .telephone(libraryUserDTO.getTelephone())
                 .name(libraryUserDTO.getName())
                 .age(libraryUserDTO.getAge())
+                .specificId(libraryUserDTO.getSpecificId())
                 .build();
     }
 
