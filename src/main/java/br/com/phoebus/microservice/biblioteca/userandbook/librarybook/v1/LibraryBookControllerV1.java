@@ -3,6 +3,9 @@ package br.com.phoebus.microservice.biblioteca.userandbook.librarybook.v1;
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.LibraryBookDTO;
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.DeleteLibraryBookService;
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.EditLibraryBookService;
+import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.VerifyExistLibraryBooksService;
+import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.ChangeStatusAndBorrowedBooksService;
+import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.GetAllBookForSpecificIDService;
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.GetLibraryBookService;
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.ListLibraryBookService;
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.ListPageLibraryBookService;
@@ -31,6 +34,9 @@ public class LibraryBookControllerV1 {
 
     private final DeleteLibraryBookService deleteLibraryBookService;
     private final EditLibraryBookService editLibraryBookService;
+    private final VerifyExistLibraryBooksService verifyExistLibraryBooksService;
+    private final ChangeStatusAndBorrowedBooksService changeStatusAndBorrowedBooksService;
+    private final GetAllBookForSpecificIDService getAllBookForSpecificIdService;
     private final GetLibraryBookService getLibraryBookService;
     private final ListLibraryBookService listLibraryBookService;
     private final ListPageLibraryBookService listPageLibraryBookService;
@@ -46,6 +52,22 @@ public class LibraryBookControllerV1 {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void editLibraryBook(@PathVariable(value = "id") Long id, @RequestBody LibraryBookDTO libraryBookDTO) {
         editLibraryBookService.editLibraryBook(id, libraryBookDTO);
+    }
+
+    @GetMapping(value = "/verifyBooks", params = "idsBooks")
+    void editStatusBook(@RequestParam("idsBooks") List<Long> idsBooks) {
+        verifyExistLibraryBooksService.verifyExistLibraryBooks(idsBooks);
+    }
+    //alterar URL para edit status e borrowed
+    @PutMapping(value = "/changeStatus/{id}", params = "idsBooks")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void existBooks(@PathVariable("id") Long id, @RequestParam("idsBooks") List<Long> idsBooks) {
+        changeStatusAndBorrowedBooksService.changeStatusAndBorrowed(id, idsBooks);
+    }
+
+    @GetMapping(value = "/getAllLoanBook/{id}")
+    List<LibraryBookDTO> getAllLoanBook(@PathVariable(value = "id") Long id) {
+        return getAllBookForSpecificIdService.getAllBooksForSpecificId(id);
     }
 
     @GetMapping("/{id}")

@@ -26,7 +26,7 @@ public class LibraryBookDTO {
     private Long id;
 
     @NotNull
-    private boolean borrewed;
+    private boolean borrowed;
 
     @NotEmpty(message = "Title may not be empty")
     private String title;
@@ -44,15 +44,18 @@ public class LibraryBookDTO {
     @Min(1300)
     private int year;
 
+    private Long specificIDLoan;
+
     public static LibraryBookDTO from(LibraryBook libraryBook) {
         return LibraryBookDTO.builder()
                 .id(libraryBook.getId())
-                .borrewed(libraryBook.isBorrowed())
+                .borrowed(libraryBook.isBorrowed())
                 .title(libraryBook.getTitle())
                 .resume(libraryBook.getResume())
                 .isbn(libraryBook.getIsbn())
                 .author(libraryBook.getAuthor())
                 .year(libraryBook.getYear())
+                .specificIDLoan(libraryBook.getSpecificIDLoan())
                 .build();
     }
 

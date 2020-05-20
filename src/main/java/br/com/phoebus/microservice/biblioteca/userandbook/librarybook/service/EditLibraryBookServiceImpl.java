@@ -22,6 +22,8 @@ public class EditLibraryBookServiceImpl implements EditLibraryBookService {
         libraryBook.setResume(libraryBookDTO.getResume());
         libraryBook.setTitle(libraryBookDTO.getTitle());
         libraryBook.setYear(libraryBookDTO.getYear());
+        libraryBook.setBorrowed(libraryBookDTO.isBorrowed());
+        libraryBook.setSpecificIDLoan(libraryBookDTO.getSpecificIDLoan());
 
         libraryBookRepository.save(libraryBook);
     }

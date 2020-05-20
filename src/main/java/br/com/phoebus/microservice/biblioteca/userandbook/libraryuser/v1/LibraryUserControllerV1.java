@@ -50,10 +50,10 @@ public class LibraryUserControllerV1 {
         editLibraryUserService.editLibraryUser(id, libraryUserDTO);
     }
 
-    @PutMapping(value = "/editSpecific/{id}")
+    @PutMapping(value = "/editUserSpecific/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    void editLibraryUserSpecificId(@Valid @PathVariable(value = "id") Long id, @RequestBody String specificId) {
-        editSpecificIdLibraryUserService.editSpecifIdLibraryUser(id, specificId);
+    void editLibraryUserSpecificId(@Valid @PathVariable(value = "id") Long id, @RequestBody String specificIDLoan) {
+        editSpecificIdLibraryUserService.editSpecifIdLibraryUser(id, specificIDLoan);
     }
 
     @GetMapping("/{id}")

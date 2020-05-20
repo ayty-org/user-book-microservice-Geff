@@ -33,7 +33,7 @@ public class LibraryUserDTO {
     @Size(min = 8)
     private String telephone;
 
-    private String specificId;
+    private String specificIDLoan;
 
     public static LibraryUserDTO from(LibraryUser libraryUser) {
         return LibraryUserDTO.builder()
@@ -41,7 +41,7 @@ public class LibraryUserDTO {
                 .age(libraryUser.getAge())
                 .name(libraryUser.getName())
                 .telephone(libraryUser.getTelephone())
-                .specificId(libraryUser.getSpecificId())
+                .specificIDLoan(libraryUser.getSpecificIDLoan())
                 .build();
     }
 

@@ -38,7 +38,7 @@ public class LibraryUser implements Serializable {
 
     private String telephone;
 
-    private String specificId;
+    private String specificIDLoan;
 
     public static LibraryUser to(LibraryUserDTO libraryUserDTO) {
         return LibraryUser.builder()
@@ -46,7 +46,7 @@ public class LibraryUser implements Serializable {
                 .telephone(libraryUserDTO.getTelephone())
                 .name(libraryUserDTO.getName())
                 .age(libraryUserDTO.getAge())
-                .specificId(libraryUserDTO.getSpecificId())
+                .specificIDLoan(libraryUserDTO.getSpecificIDLoan())
                 .build();
     }
 

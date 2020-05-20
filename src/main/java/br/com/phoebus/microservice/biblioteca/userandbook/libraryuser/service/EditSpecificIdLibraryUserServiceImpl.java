@@ -13,10 +13,10 @@ public class EditSpecificIdLibraryUserServiceImpl implements EditSpecificIdLibra
 
 
     @Override
-    public void editSpecifIdLibraryUser(Long id, String specificId) {
-        System.out.println(specificId);
+    public void editSpecifIdLibraryUser(Long id, String specificIDLoan) {
+        System.out.println(specificIDLoan);
         LibraryUser libraryUser = libraryUserRepository.findById(id).orElseThrow(LibraryUserNotFoundException::new);
-        libraryUser.setSpecificId(specificId);
+        libraryUser.setSpecificIDLoan(specificIDLoan);
         libraryUserRepository.save(libraryUser);
 
     }

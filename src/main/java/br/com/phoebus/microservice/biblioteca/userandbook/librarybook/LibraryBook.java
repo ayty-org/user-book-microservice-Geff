@@ -45,15 +45,18 @@ public class LibraryBook implements Serializable {
 
     private int year;
 
+    private Long specificIDLoan;
+
     public static LibraryBook to(LibraryBookDTO libraryBookDTO) {
         return LibraryBook.builder()
                 .id(libraryBookDTO.getId())
-                .borrowed(libraryBookDTO.isBorrewed())
+                .borrowed(libraryBookDTO.isBorrowed())
                 .title(libraryBookDTO.getTitle())
                 .resume(libraryBookDTO.getResume())
                 .isbn(libraryBookDTO.getIsbn())
                 .author(libraryBookDTO.getAuthor())
                 .year(libraryBookDTO.getYear())
+                .specificIDLoan(libraryBookDTO.getSpecificIDLoan())//remover isso? ou ajeitar o nome
                 .build();
     }
 
