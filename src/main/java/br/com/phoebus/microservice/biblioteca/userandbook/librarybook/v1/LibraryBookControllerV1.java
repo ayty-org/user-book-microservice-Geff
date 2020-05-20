@@ -5,11 +5,12 @@ import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.De
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.EditLibraryBookService;
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.VerifyExistLibraryBooksService;
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.ChangeStatusAndBorrowedBooksService;
-import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.GetAllBookForSpecificIDService;
+import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.GetAllBookForSpecificIDLoanService;
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.GetLibraryBookService;
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.ListLibraryBookService;
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.ListPageLibraryBookService;
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.SaveLibraryBookService;
+import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.VerifyJustExistBooksForIdService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -36,11 +37,12 @@ public class LibraryBookControllerV1 {
     private final EditLibraryBookService editLibraryBookService;
     private final VerifyExistLibraryBooksService verifyExistLibraryBooksService;
     private final ChangeStatusAndBorrowedBooksService changeStatusAndBorrowedBooksService;
-    private final GetAllBookForSpecificIDService getAllBookForSpecificIdService;
+    private final GetAllBookForSpecificIDLoanService getAllBookForSpecificIdLoanService;
     private final GetLibraryBookService getLibraryBookService;
     private final ListLibraryBookService listLibraryBookService;
     private final ListPageLibraryBookService listPageLibraryBookService;
     private final SaveLibraryBookService saveLibraryBookService;
+    private final VerifyJustExistBooksForIdService verifyJustExistBooksForIdService;
 
     @DeleteMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -54,20 +56,26 @@ public class LibraryBookControllerV1 {
         editLibraryBookService.editLibraryBook(id, libraryBookDTO);
     }
 
+    @GetMapping(value = "/verifyJustExist", params = "idsBooks")
+    void verifyJustExist(@RequestParam("idsBooks") List<Long> idsBooks) {
+        verifyJustExistBooksForIdService.verifyJustExistBooksForId(idsBooks);
+    }
+
     @GetMapping(value = "/verifyBooks", params = "idsBooks")
-    void editStatusBook(@RequestParam("idsBooks") List<Long> idsBooks) {
+    void verifyBoooks(@RequestParam("idsBooks") List<Long> idsBooks) {
         verifyExistLibraryBooksService.verifyExistLibraryBooks(idsBooks);
     }
     //alterar URL para edit status e borrowed
     @PutMapping(value = "/changeStatus/{id}", params = "idsBooks")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    void existBooks(@PathVariable("id") Long id, @RequestParam("idsBooks") List<Long> idsBooks) {
+    void changeStatusBooks(@PathVariable("id") Long id, @RequestParam("idsBooks") List<Long> idsBooks) {
         changeStatusAndBorrowedBooksService.changeStatusAndBorrowed(id, idsBooks);
     }
 
+
     @GetMapping(value = "/getAllLoanBook/{id}")
     List<LibraryBookDTO> getAllLoanBook(@PathVariable(value = "id") Long id) {
-        return getAllBookForSpecificIdService.getAllBooksForSpecificId(id);
+        return getAllBookForSpecificIdLoanService.getAllBooksForSpecificId(id);
     }
 
     @GetMapping("/{id}")

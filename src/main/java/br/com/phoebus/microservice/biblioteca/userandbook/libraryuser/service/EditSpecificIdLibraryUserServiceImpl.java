@@ -16,7 +16,12 @@ public class EditSpecificIdLibraryUserServiceImpl implements EditSpecificIdLibra
     public void editSpecifIdLibraryUser(Long id, String specificIDLoan) {
         System.out.println(specificIDLoan);
         LibraryUser libraryUser = libraryUserRepository.findById(id).orElseThrow(LibraryUserNotFoundException::new);
-        libraryUser.setSpecificIDLoan(specificIDLoan);
+        if (specificIDLoan == "null"){
+            libraryUser.setSpecificIDLoan(null);
+        }else {
+            libraryUser.setSpecificIDLoan(specificIDLoan);
+        }
+
         libraryUserRepository.save(libraryUser);
 
     }

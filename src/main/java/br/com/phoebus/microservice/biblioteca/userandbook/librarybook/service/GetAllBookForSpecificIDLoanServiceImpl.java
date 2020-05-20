@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class GetAllBookForSpecificIDServiceImpl implements GetAllBookForSpecificIDService {
+public class GetAllBookForSpecificIDLoanServiceImpl implements GetAllBookForSpecificIDLoanService {
     private final LibraryBookRepository libraryBookRepository;
 
     @Override

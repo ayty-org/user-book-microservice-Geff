@@ -5,7 +5,7 @@ import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.LibraryBoo
 import java.util.List;
 
 @FunctionalInterface
-public interface GetAllBookForSpecificIDService {
+public interface GetAllBookForSpecificIDLoanService {
 
     List<LibraryBookDTO> getAllBooksForSpecificId(Long id);
 }
