@@ -9,20 +9,18 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class EditSpecificIdLibraryUserServiceImpl implements EditSpecificIdLibraryUserService{
-    private final LibraryUserRepository libraryUserRepository;
 
+    private final LibraryUserRepository libraryUserRepository;
 
     @Override
     public void editSpecifIdLibraryUser(Long id, String specificIDLoan) {
-        System.out.println(specificIDLoan);
+
         LibraryUser libraryUser = libraryUserRepository.findById(id).orElseThrow(LibraryUserNotFoundException::new);
         if (specificIDLoan == "null"){
             libraryUser.setSpecificIDLoan(null);
         }else {
             libraryUser.setSpecificIDLoan(specificIDLoan);
         }
-
         libraryUserRepository.save(libraryUser);
-
     }
 }

@@ -6,7 +6,7 @@ import br.com.phoebus.microservice.biblioteca.userandbook.libraryuser.service.Ed
 import br.com.phoebus.microservice.biblioteca.userandbook.libraryuser.service.EditSpecificIdLibraryUserService;
 import br.com.phoebus.microservice.biblioteca.userandbook.libraryuser.service.GetLibraryUserService;
 import br.com.phoebus.microservice.biblioteca.userandbook.libraryuser.service.ListLibraryUserService;
-import br.com.phoebus.microservice.biblioteca.userandbook.libraryuser.service.ListPageLibraryuserService;
+import br.com.phoebus.microservice.biblioteca.userandbook.libraryuser.service.PageLibraryuserService;
 import br.com.phoebus.microservice.biblioteca.userandbook.libraryuser.service.SaveLibraryUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -35,7 +35,7 @@ public class LibraryUserControllerV1 {
     private final EditSpecificIdLibraryUserService editSpecificIdLibraryUserService;
     private final GetLibraryUserService getLibraryUserService;
     private final ListLibraryUserService listLibraryUserService;
-    private final ListPageLibraryuserService listPageLibraryuserService;
+    private final PageLibraryuserService pageLibraryuserService;
     private final SaveLibraryUserService saveLibraryUserService;
 
     @DeleteMapping(value = "/{id}")
@@ -68,7 +68,7 @@ public class LibraryUserControllerV1 {
 
     @GetMapping(params = {"page", "size"})
     Page<LibraryUserDTO> listOnPageLibraryUser(@RequestParam("page") Integer page, @RequestParam("size") Integer size) {
-        return listPageLibraryuserService.listPageLibraryUser(page, size);
+        return pageLibraryuserService.listPageLibraryUser(page, size);
     }
 
     @PostMapping

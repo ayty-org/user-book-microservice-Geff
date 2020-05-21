@@ -4,7 +4,7 @@ import br.com.phoebus.microservice.biblioteca.userandbook.libraryuser.LibraryUse
 import org.springframework.data.domain.Page;
 
 @FunctionalInterface
-public interface ListPageLibraryuserService {
+public interface PageLibraryuserService {
 
     Page<LibraryUserDTO> listPageLibraryUser(Integer page, Integer size);
 }

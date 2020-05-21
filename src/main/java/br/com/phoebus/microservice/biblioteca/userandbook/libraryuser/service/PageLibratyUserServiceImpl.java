@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class ListPageLibratyUserServiceImpl implements ListPageLibraryuserService {
+public class PageLibratyUserServiceImpl implements PageLibraryuserService {
     private final LibraryUserRepository libraryUserRepository;
 
     @Override
