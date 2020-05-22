@@ -59,6 +59,7 @@ public class EditLibraryUserServiceTest {
         editLibraryUserService.editLibraryUser(ID_EDIT, libraryUserDTO);
 
         ArgumentCaptor<LibraryUser> captorUser = ArgumentCaptor.forClass(LibraryUser.class);
+        verify(repository, times(1)).findById(ID_EDIT);
         verify(repository, times(1)).save(captorUser.capture());
 
         LibraryUser result = captorUser.getValue();
@@ -87,6 +88,7 @@ public class EditLibraryUserServiceTest {
 
         assertThrows(LibraryUserNotFoundException.class, () -> editLibraryUserService.editLibraryUser(ID_EDIT, libraryUserDTO));
 
+        verify(repository, times(1)).findById(ID_EDIT);
         verify(repository, times(0)).save(libraryUser.get());
     }
 }

@@ -4,7 +4,7 @@ import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.LibraryBoo
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.DeleteLibraryBookService;
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.EditLibraryBookService;
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.VerifyExistLibraryBooksService;
-import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.ChangeStatusAndBorrowedBooksService;
+import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.ChangeIDLoanAndBorrowedBooksService;
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.GetAllBookForSpecificIDLoanService;
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.GetLibraryBookService;
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.ListLibraryBookService;
@@ -36,7 +36,7 @@ public class LibraryBookControllerV1 {
     private final DeleteLibraryBookService deleteLibraryBookService;
     private final EditLibraryBookService editLibraryBookService;
     private final VerifyExistLibraryBooksService verifyExistLibraryBooksService;
-    private final ChangeStatusAndBorrowedBooksService changeStatusAndBorrowedBooksService;
+    private final ChangeIDLoanAndBorrowedBooksService changeIDLoanAndBorrowedBooksService;
     private final GetAllBookForSpecificIDLoanService getAllBookForSpecificIdLoanService;
     private final GetLibraryBookService getLibraryBookService;
     private final ListLibraryBookService listLibraryBookService;
@@ -69,7 +69,7 @@ public class LibraryBookControllerV1 {
     @PutMapping(value = "/changeStatus/{id}", params = "idsBooks")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void changeStatusBooks(@PathVariable("id") Long id, @RequestParam("idsBooks") List<Long> idsBooks) {
-        changeStatusAndBorrowedBooksService.changeStatusAndBorrowed(id, idsBooks);
+        changeIDLoanAndBorrowedBooksService.changeStatusAndBorrowed(id, idsBooks);
     }
 
 

@@ -11,12 +11,12 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ChangeStatusAndBorrowedBooksServiceImpl implements ChangeStatusAndBorrowedBooksService {
+public class ChangeIDLoanAndBorrowedBooksServiceImpl implements ChangeIDLoanAndBorrowedBooksService {
     private final LibraryBookRepository libraryBookRepository;
     private final GetAllBookForSpecificIDLoanService getAllBookForSpecificIDLoanService;
 
     @Override
-    public void changeStatusAndBorrowed(Long id, List<Long> idsBooks) {
+    public void changeStatusAndBorrowed(Long idLoan, List<Long> idsBooks) {
         for (Long idBook : idsBooks) {
             if (!libraryBookRepository.existsById(idBook)) {
                 throw new LibraryBookNotFoundException();
@@ -24,7 +24,7 @@ public class ChangeStatusAndBorrowedBooksServiceImpl implements ChangeStatusAndB
         }
 
         LibraryBook libraryBook;
-        List<LibraryBookDTO> libraryBookDTOList = getAllBookForSpecificIDLoanService.getAllBooksForSpecificId(id);
+        List<LibraryBookDTO> libraryBookDTOList = getAllBookForSpecificIDLoanService.getAllBooksForSpecificId(idLoan);
 
         for (LibraryBookDTO libraryBookDTO : libraryBookDTOList) {
             if (!idsBooks.contains(libraryBookDTO.getSpecificIDLoan())) {
@@ -40,7 +40,7 @@ public class ChangeStatusAndBorrowedBooksServiceImpl implements ChangeStatusAndB
         for (Long idBook : idsBooks) {
             libraryBook = libraryBookRepository.getOne(idBook);
             libraryBook.setBorrowed(true);
-            libraryBook.setSpecificIDLoan(id);
+            libraryBook.setSpecificIDLoan(idLoan);
             libraryBookRepository.save(libraryBook);
         }
     }

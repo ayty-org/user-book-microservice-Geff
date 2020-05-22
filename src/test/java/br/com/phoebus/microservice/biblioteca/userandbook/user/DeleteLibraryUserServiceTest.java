@@ -42,7 +42,7 @@ public class DeleteLibraryUserServiceTest {
 
         deleteLibraryUserService.deleteLibraryUser(ID_DELETE);
 
-        verify(repository).deleteById(ID_DELETE);
+        verify(repository, times(1)).deleteById(ID_DELETE);
     }
 
     @Test
@@ -55,5 +55,4 @@ public class DeleteLibraryUserServiceTest {
 
         verify(repository, times(0)).deleteById(ID_DELETE);
     }
-
 }
