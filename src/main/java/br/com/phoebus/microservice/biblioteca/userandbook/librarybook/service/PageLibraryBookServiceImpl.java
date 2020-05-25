@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class ListPageLibraryBookServiceImpl implements ListPageLibraryBookService {
+public class PageLibraryBookServiceImpl implements PageLibraryBookService {
     private final LibraryBookRepository libraryBookRepository;
 
     @Override

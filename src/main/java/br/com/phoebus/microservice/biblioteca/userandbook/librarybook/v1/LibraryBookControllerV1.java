@@ -8,7 +8,7 @@ import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.Ch
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.GetAllBookForSpecificIDLoanService;
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.GetLibraryBookService;
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.ListLibraryBookService;
-import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.ListPageLibraryBookService;
+import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.PageLibraryBookService;
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.SaveLibraryBookService;
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.VerifyJustExistBooksForIdService;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +40,7 @@ public class LibraryBookControllerV1 {
     private final GetAllBookForSpecificIDLoanService getAllBookForSpecificIdLoanService;
     private final GetLibraryBookService getLibraryBookService;
     private final ListLibraryBookService listLibraryBookService;
-    private final ListPageLibraryBookService listPageLibraryBookService;
+    private final PageLibraryBookService pageLibraryBookService;
     private final SaveLibraryBookService saveLibraryBookService;
     private final VerifyJustExistBooksForIdService verifyJustExistBooksForIdService;
 
@@ -90,7 +90,7 @@ public class LibraryBookControllerV1 {
 
     @GetMapping(params = {"page", "size"})
     Page<LibraryBookDTO> listOnPageLibraryBook(@RequestParam("page") Integer page, @RequestParam("size") Integer size) {
-        return listPageLibraryBookService.listPageLibraryBooks(page, size);
+        return pageLibraryBookService.listPageLibraryBooks(page, size);
     }
 
     @PostMapping

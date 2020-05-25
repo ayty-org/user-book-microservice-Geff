@@ -1,5 +1,6 @@
 package br.com.phoebus.microservice.biblioteca.userandbook.book;
 
+import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.LibraryBook;
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.LibraryBookDTO;
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.LibraryBookRepository;
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.ChangeIDLoanAndBorrowedBooksServiceImpl;
@@ -17,8 +18,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static br.com.phoebus.microservice.biblioteca.userandbook.book.builders.LibraryBookDTOBuilder.createLibraryBookDTO;
+import static br.com.phoebus.microservice.biblioteca.userandbook.book.builders.LibraryBookBuilder.createLibraryBook;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -49,20 +54,35 @@ public class ChangeIDLoanAndBorrowedBookServiceTest {
         List<Long> idsBooks = new ArrayList<>();
         idsBooks.add(1L);
         idsBooks.add(2L);
-        LibraryBookDTO libraryBook1 = createLibraryBookDTO().specificIDLoan(ID_LOAN).build();
-        LibraryBookDTO libraryBook2 = createLibraryBookDTO().id(2L).specificIDLoan(ID_LOAN).build();
-        List<LibraryBookDTO> libraryBookList = Arrays.asList(libraryBook1, libraryBook2);
+        //LibraryBookDTO libraryBookDTO1 = createLibraryBookDTO().build();
+        //LibraryBookDTO libraryBookDTO2 = createLibraryBookDTO().id(2L).build();
+        List<LibraryBookDTO> libraryBookList = Arrays.asList();
+        LibraryBook libraryBook1 = createLibraryBook().id(1L).build();
+        LibraryBook libraryBook2 = createLibraryBook().id(2L).build();
 
         when(libraryBookRepository.existsById(anyLong())).thenReturn(true);
         when(getAllBookForSpecificIDLoanService.getAllBooksForSpecificId(anyLong())).thenReturn(libraryBookList);
-
+        when(libraryBookRepository.getOne(eq(1L))).thenReturn(libraryBook1);
+        when(libraryBookRepository.getOne(eq(2L))).thenReturn(libraryBook2);
+        //está causando null pointer exception
         changeIDLoanAndBorrowedBooksService.changeStatusAndBorrowed(ID_LOAN, idsBooks);
 
-        ArgumentCaptor<List<LibraryBookDTO>> captorListBook = ArgumentCaptor.forClass(List.class);
+        ArgumentCaptor<LibraryBook> captorBook1 = ArgumentCaptor.forClass(LibraryBook.class);
+        ArgumentCaptor<LibraryBook> captorBook2 = ArgumentCaptor.forClass(LibraryBook.class);
         ArgumentCaptor<Long> captorLong = ArgumentCaptor.forClass(Long.class);
 
         verify(libraryBookRepository, times(1)).existsById(1L);
         verify(libraryBookRepository, times(1)).existsById(2L);
+        verify(libraryBookRepository, times(2)).save(captorBook1.capture());
+
+        LibraryBook result = captorBook1.getValue();
+
+        assertAll("Book",
+                () -> assertThat(result.getSpecificIDLoan(), is(ID_LOAN)),
+                () -> assertThat(result.isBorrowed(), is(true))
+        );
+
+        verify(libraryBookRepository, times(2)).save(captorBook2.capture());
 
         //estava pensando em como usar o argumentcaptor para fazer as capturas...
 

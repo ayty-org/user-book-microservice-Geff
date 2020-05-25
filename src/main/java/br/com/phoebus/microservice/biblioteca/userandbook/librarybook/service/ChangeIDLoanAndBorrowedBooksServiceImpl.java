@@ -24,10 +24,13 @@ public class ChangeIDLoanAndBorrowedBooksServiceImpl implements ChangeIDLoanAndB
         }
 
         LibraryBook libraryBook;
-        List<LibraryBookDTO> libraryBookDTOList = getAllBookForSpecificIDLoanService.getAllBooksForSpecificId(idLoan);
 
+        //Pego todos os livros que contem o ID do Loan e vejo se eles estão na lista de idsBooks
+        //Caso exista um livro que não esteja na lista de idsBooks seguinifica que foi desvinculado do Loan
+        //E então eu altero o status de Borrowed pra false e o ID do Loan para null
+        List<LibraryBookDTO> libraryBookDTOList = getAllBookForSpecificIDLoanService.getAllBooksForSpecificId(idLoan);
         for (LibraryBookDTO libraryBookDTO : libraryBookDTOList) {
-            if (!idsBooks.contains(libraryBookDTO.getSpecificIDLoan())) {
+            if (!idsBooks.contains(libraryBookDTO.getId())) {
                 libraryBook = libraryBookRepository.getOne(libraryBookDTO.getId());
                 libraryBook.setBorrowed(false);
                 libraryBook.setSpecificIDLoan(null);
@@ -37,6 +40,7 @@ public class ChangeIDLoanAndBorrowedBooksServiceImpl implements ChangeIDLoanAndB
             }
         }
 
+        //Aqui eu pego os novos livros
         for (Long idBook : idsBooks) {
             libraryBook = libraryBookRepository.getOne(idBook);
             libraryBook.setBorrowed(true);
