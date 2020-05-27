@@ -14,11 +14,11 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import static br.com.phoebus.microservice.biblioteca.userandbook.book.builders.LibraryBookBuilder.createLibraryBook;
+import static br.com.phoebus.microservice.biblioteca.userandbook.book.builders.LibraryBookDTOBuilder.createLibraryBookDTO;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -51,20 +51,22 @@ public class ChangeIDLoanAndBorrowedBookServiceTest {
     @DisplayName("Troca o idLoan e o Borrowed para true")
     void shouldChangeIDLoanAndBorrowed() {
 
-        List<Long> idsBooks = new ArrayList<>();
-        idsBooks.add(1L);
-        idsBooks.add(2L);
-        //LibraryBookDTO libraryBookDTO1 = createLibraryBookDTO().build();
-        //LibraryBookDTO libraryBookDTO2 = createLibraryBookDTO().id(2L).build();
-        List<LibraryBookDTO> libraryBookList = Arrays.asList();
+        List<Long> idsBooks = Arrays.asList(1L, 2L);
+
+        LibraryBookDTO libraryBookDTO1 = createLibraryBookDTO().build();
+        LibraryBookDTO libraryBookDTO2 = createLibraryBookDTO().id(2L).borrowed(true).specificIDLoan(ID_LOAN).build();
+        LibraryBookDTO libraryBookDTO3 = createLibraryBookDTO().id(3L).borrowed(true).specificIDLoan(ID_LOAN).build();
+        List<LibraryBookDTO> libraryBookList = Arrays.asList(libraryBookDTO2, libraryBookDTO3);
+
         LibraryBook libraryBook1 = createLibraryBook().id(1L).build();
-        LibraryBook libraryBook2 = createLibraryBook().id(2L).build();
+        LibraryBook libraryBook2 = createLibraryBook().id(2L).borrowed(true).specificIDLoan(ID_LOAN).build();
+        LibraryBook libraryBook3 = createLibraryBook().id(3L).borrowed(true).specificIDLoan(ID_LOAN).build();
 
         when(libraryBookRepository.existsById(anyLong())).thenReturn(true);
         when(getAllBookForSpecificIDLoanService.getAllBooksForSpecificId(anyLong())).thenReturn(libraryBookList);
         when(libraryBookRepository.getOne(eq(1L))).thenReturn(libraryBook1);
         when(libraryBookRepository.getOne(eq(2L))).thenReturn(libraryBook2);
-        //está causando null pointer exception
+        when(libraryBookRepository.getOne(eq(3L))).thenReturn(libraryBook3);
         changeIDLoanAndBorrowedBooksService.changeStatusAndBorrowed(ID_LOAN, idsBooks);
 
         ArgumentCaptor<LibraryBook> captorBook1 = ArgumentCaptor.forClass(LibraryBook.class);

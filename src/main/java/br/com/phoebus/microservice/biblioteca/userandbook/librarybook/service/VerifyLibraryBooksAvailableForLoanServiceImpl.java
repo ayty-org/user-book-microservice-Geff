@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class VerifyExistLibraryBooksServiceImpl implements VerifyExistLibraryBooksService {
+public class VerifyLibraryBooksAvailableForLoanServiceImpl implements VerifyLibraryBooksAvailableForLoanService {
     private final LibraryBookRepository libraryBookRepository;
 
     @Override

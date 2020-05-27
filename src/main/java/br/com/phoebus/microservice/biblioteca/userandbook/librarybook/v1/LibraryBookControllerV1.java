@@ -3,7 +3,7 @@ package br.com.phoebus.microservice.biblioteca.userandbook.librarybook.v1;
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.LibraryBookDTO;
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.DeleteLibraryBookService;
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.EditLibraryBookService;
-import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.VerifyExistLibraryBooksService;
+import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.VerifyLibraryBooksAvailableForLoanService;
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.ChangeIDLoanAndBorrowedBooksService;
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.GetAllBookForSpecificIDLoanService;
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.service.GetLibraryBookService;
@@ -35,7 +35,7 @@ public class LibraryBookControllerV1 {
 
     private final DeleteLibraryBookService deleteLibraryBookService;
     private final EditLibraryBookService editLibraryBookService;
-    private final VerifyExistLibraryBooksService verifyExistLibraryBooksService;
+    private final VerifyLibraryBooksAvailableForLoanService verifyLibraryBooksAvailableForLoanService;
     private final ChangeIDLoanAndBorrowedBooksService changeIDLoanAndBorrowedBooksService;
     private final GetAllBookForSpecificIDLoanService getAllBookForSpecificIdLoanService;
     private final GetLibraryBookService getLibraryBookService;
@@ -63,7 +63,7 @@ public class LibraryBookControllerV1 {
 
     @GetMapping(value = "/verifyBooks", params = "idsBooks")
     void verifyBoooks(@RequestParam("idsBooks") List<Long> idsBooks) {
-        verifyExistLibraryBooksService.verifyExistLibraryBooks(idsBooks);
+        verifyLibraryBooksAvailableForLoanService.verifyExistLibraryBooks(idsBooks);
     }
     //alterar URL para edit status e borrowed
     @PutMapping(value = "/changeStatus/{id}", params = "idsBooks")
