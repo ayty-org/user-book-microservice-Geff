@@ -44,4 +44,16 @@ public class LibraryUserDTO {
                 .specificIDLoan(libraryUser.getSpecificIDLoan())
                 .build();
     }
+
+    public static List<LibraryUserDTO> from(List<LibraryUser> libraryUserList) {
+        List<LibraryUserDTO> libraryUserDTOList = new ArrayList<>();
+        for (LibraryUser libraryUser : libraryUserList) {
+            libraryUserDTOList.add(LibraryUserDTO.from(libraryUser));
+        }
+        return libraryUserDTOList;
+    }
+
+    public static Page<LibraryUserDTO> from(Page<LibraryUser> pages) {
+        return pages.map(LibraryUserDTO::from);
+    }
 }

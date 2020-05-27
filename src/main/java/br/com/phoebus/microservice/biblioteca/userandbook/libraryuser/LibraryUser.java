@@ -49,17 +49,4 @@ public class LibraryUser implements Serializable {
                 .specificIDLoan(libraryUserDTO.getSpecificIDLoan())
                 .build();
     }
-
-    public static List<LibraryUser> to(List<LibraryUserDTO> libraryUserDTOList) {
-        List<LibraryUser> libraryUserList = new ArrayList<>();
-        for (LibraryUserDTO libraryUserDTO : libraryUserDTOList) {
-            libraryUserList.add(LibraryUser.to(libraryUserDTO));
-        }
-        return libraryUserList;
-    }
-
-    public static Page<LibraryUser> to(Page<LibraryUserDTO> pages) {
-        return pages.map(LibraryUser::to);
-    }
-
 }

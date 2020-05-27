@@ -59,17 +59,4 @@ public class LibraryBook implements Serializable {
                 .specificIDLoan(libraryBookDTO.getSpecificIDLoan())//remover isso? ou ajeitar o nome
                 .build();
     }
-
-    public static List<LibraryBook> to(List<LibraryBookDTO> bookDTOList) {
-        List<LibraryBook> libraryBookList = new ArrayList<>();
-        for (LibraryBookDTO libraryBookDTO : bookDTOList) {
-            libraryBookList.add(LibraryBook.to(libraryBookDTO));
-        }
-        return libraryBookList;
-    }
-
-    public static Page<LibraryBook> to(Page<LibraryBookDTO> pages) {
-        return pages.map(LibraryBook::to);
-    }
-
 }
