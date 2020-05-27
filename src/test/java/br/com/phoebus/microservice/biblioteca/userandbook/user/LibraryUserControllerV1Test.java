@@ -153,7 +153,7 @@ public class LibraryUserControllerV1Test {
         mockMvc.perform(put(URL_USER + "/editUserSpecific/{id}", ID_USER)
                 .contentType(CONT_TYPE)
                 .characterEncoding(UTF8)
-                .content(objectMapper.writeValueAsString("0001")))
+                .content("0001"))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
@@ -201,6 +201,8 @@ public class LibraryUserControllerV1Test {
                 .characterEncoding(UTF8))
                 .andDo(print())
                 .andExpect(status().isNotFound());
+
+        verify(getLibraryUserService, times(1)).getLibraryUserForID(ID_USER);
     }
 
     @Test
@@ -224,6 +226,7 @@ public class LibraryUserControllerV1Test {
         String resultResponseBody = mvcResult.getResponse().getContentAsString();
 
         assertThat(objectMapper.writeValueAsString(libraryUserDTOList), is(resultResponseBody));
+        verify(listLibraryUserService, times(1)).listLibraryUsers();
     }
 
     @Test
@@ -249,14 +252,14 @@ public class LibraryUserControllerV1Test {
 
         MvcResult mvcResult = mockMvc.perform(get(URL_USER)
                 .contentType(CONT_TYPE)
-                .contentType(UTF8)
+                .characterEncoding(UTF8)
                 .param("page", "1").param("size", "2"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
 
         String resultResponseBody = mvcResult.getResponse().getContentAsString();
-
+        verify(pageLibraryuserService, times(1)).listPageLibraryUser(1,2);
         assertThat(objectMapper.writeValueAsString(libraryUserDTOPage), is(resultResponseBody));
     }
 

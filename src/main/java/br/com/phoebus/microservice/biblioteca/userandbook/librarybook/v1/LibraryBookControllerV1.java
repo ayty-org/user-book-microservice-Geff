@@ -52,7 +52,7 @@ public class LibraryBookControllerV1 {
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    void editLibraryBook(@PathVariable(value = "id") Long id, @RequestBody LibraryBookDTO libraryBookDTO) {
+    void editLibraryBook(@PathVariable(value = "id") Long id, @Valid @RequestBody LibraryBookDTO libraryBookDTO) {
         editLibraryBookService.editLibraryBook(id, libraryBookDTO);
     }
 
@@ -65,13 +65,13 @@ public class LibraryBookControllerV1 {
     void verifyBoooks(@RequestParam("idsBooks") List<Long> idsBooks) {
         verifyLibraryBooksAvailableForLoanService.verifyExistLibraryBooks(idsBooks);
     }
+
     //alterar URL para edit status e borrowed
     @PutMapping(value = "/changeStatus/{id}", params = "idsBooks")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void changeStatusBooks(@PathVariable("id") Long id, @RequestParam("idsBooks") List<Long> idsBooks) {
         changeIDLoanAndBorrowedBooksService.changeStatusAndBorrowed(id, idsBooks);
     }
-
 
     @GetMapping(value = "/getAllLoanBook/{id}")
     List<LibraryBookDTO> getAllLoanBook(@PathVariable(value = "id") Long id) {
