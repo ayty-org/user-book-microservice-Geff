@@ -58,16 +58,4 @@ public class LibraryBookDTO {
                 .specificIDLoan(libraryBook.getSpecificIDLoan())
                 .build();
     }
-
-    public static List<LibraryBookDTO> from(List<LibraryBook> bookList) {
-        List<LibraryBookDTO> libraryBookDTOList = new ArrayList<>();
-        for (LibraryBook libraryBook : bookList) {
-            libraryBookDTOList.add(LibraryBookDTO.from(libraryBook));
-        }
-        return libraryBookDTOList;
-    }
-
-    public static Page<LibraryBookDTO> from(Page<LibraryBook> pages) {
-        return pages.map(LibraryBookDTO::from);
-    }
 }
