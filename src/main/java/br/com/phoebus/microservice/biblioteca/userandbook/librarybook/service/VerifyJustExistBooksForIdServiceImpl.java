@@ -14,6 +14,9 @@ public class VerifyJustExistBooksForIdServiceImpl implements VerifyJustExistBook
 
     @Override
     public void verifyJustExistBooksForId(List<Long> idsBooks) {
+        if(idsBooks.size() == 0){
+            throw new LibraryBookNotFoundException();
+        }
         for (Long idBook : idsBooks) {
             if (!libraryBookRepository.existsById(idBook)) {
                 throw new LibraryBookNotFoundException();

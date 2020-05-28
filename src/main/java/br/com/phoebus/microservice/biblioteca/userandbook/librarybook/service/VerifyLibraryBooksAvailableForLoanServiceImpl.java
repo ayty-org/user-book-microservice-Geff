@@ -15,6 +15,9 @@ public class VerifyLibraryBooksAvailableForLoanServiceImpl implements VerifyLibr
 
     @Override
     public void verifyExistLibraryBooks(List<Long> idsBooks) {
+        if(idsBooks.size() == 0){
+            throw new LibraryBookNotFoundException();
+        }
         for (Long idBook : idsBooks) {
             if (!libraryBookRepository.existsById(idBook)) {
                 throw new LibraryBookNotFoundException();
