@@ -215,6 +215,8 @@ public class LibraryBookControllerV1Test {
                 .characterEncoding(UTF8))
                 .andDo(print())
                 .andExpect(status().isNotFound());
+
+        verify(getLibraryBookService, times(1)).getLibraryBookForID(ID_BOOK);
     }
 
     @Test
