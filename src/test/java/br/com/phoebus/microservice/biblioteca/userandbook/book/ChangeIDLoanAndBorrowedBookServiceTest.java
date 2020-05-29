@@ -10,7 +10,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -19,9 +18,7 @@ import java.util.List;
 
 import static br.com.phoebus.microservice.biblioteca.userandbook.book.builders.LibraryBookBuilder.createLibraryBook;
 import static br.com.phoebus.microservice.biblioteca.userandbook.book.builders.LibraryBookDTOBuilder.createLibraryBookDTO;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
@@ -48,45 +45,107 @@ public class ChangeIDLoanAndBorrowedBookServiceTest {
     }
 
     @Test
-    @DisplayName("Troca o idLoan e o Borrowed para true")
-    void shouldChangeIDLoanAndBorrowed() {
+    @DisplayName("troca o status de livros que não estão na lista de idsBooks")
+    void shouldChangeStatus() {
 
         List<Long> idsBooks = Arrays.asList(1L, 2L);
 
-        LibraryBookDTO libraryBookDTO1 = createLibraryBookDTO().build();
-        LibraryBookDTO libraryBookDTO2 = createLibraryBookDTO().id(2L).borrowed(true).specificIDLoan(ID_LOAN).build();
-        LibraryBookDTO libraryBookDTO3 = createLibraryBookDTO().id(3L).borrowed(true).specificIDLoan(ID_LOAN).build();
-        List<LibraryBookDTO> libraryBookList = Arrays.asList(libraryBookDTO2, libraryBookDTO3);
+        when(libraryBookRepository.existsById(anyLong())).thenReturn(true);
+
+        List<LibraryBookDTO> libraryBookDTOList = Arrays.asList();
+        when(getAllBookForSpecificIDLoanService.getAllBooksForSpecificId(anyLong())).thenReturn(libraryBookDTOList);
+
 
         LibraryBook libraryBook1 = createLibraryBook().id(1L).build();
-        LibraryBook libraryBook2 = createLibraryBook().id(2L).borrowed(true).specificIDLoan(ID_LOAN).build();
-        LibraryBook libraryBook3 = createLibraryBook().id(3L).borrowed(true).specificIDLoan(ID_LOAN).build();
-
-        when(libraryBookRepository.existsById(anyLong())).thenReturn(true);
-        when(getAllBookForSpecificIDLoanService.getAllBooksForSpecificId(anyLong())).thenReturn(libraryBookList);
         when(libraryBookRepository.getOne(eq(1L))).thenReturn(libraryBook1);
+        LibraryBook libraryBook2 = createLibraryBook().id(2L).build();
         when(libraryBookRepository.getOne(eq(2L))).thenReturn(libraryBook2);
-        when(libraryBookRepository.getOne(eq(3L))).thenReturn(libraryBook3);
+
         changeIDLoanAndBorrowedBooksService.changeStatusAndBorrowed(ID_LOAN, idsBooks);
 
-        ArgumentCaptor<LibraryBook> captorBook1 = ArgumentCaptor.forClass(LibraryBook.class);
-        ArgumentCaptor<LibraryBook> captorBook2 = ArgumentCaptor.forClass(LibraryBook.class);
-        ArgumentCaptor<Long> captorLong = ArgumentCaptor.forClass(Long.class);
+        verify(libraryBookRepository, times(2)).existsById(anyLong());
+        verify(libraryBookRepository, times(1)).existsById(eq(1L));
+        verify(libraryBookRepository, times(1)).existsById(eq(2L));
 
-        verify(libraryBookRepository, times(1)).existsById(1L);
-        verify(libraryBookRepository, times(1)).existsById(2L);
-        verify(libraryBookRepository, times(2)).save(captorBook1.capture());
+        verify(getAllBookForSpecificIDLoanService, times(1)).getAllBooksForSpecificId(eq(ID_LOAN));
 
-        LibraryBook result = captorBook1.getValue();
+        verify(libraryBookRepository, times(2)).getOne(anyLong());
+        verify(libraryBookRepository, times(1)).getOne(eq(1L));
+        verify(libraryBookRepository, times(1)).getOne(eq(2L));
 
-        assertAll("Book",
-                () -> assertThat(result.getSpecificIDLoan(), is(ID_LOAN)),
-                () -> assertThat(result.isBorrowed(), is(true))
-        );
+        verify(libraryBookRepository, times(2)).save(any(LibraryBook.class));
+        verify(libraryBookRepository, times(1)).save(eq(libraryBook1));
+        verify(libraryBookRepository, times(1)).save(eq(libraryBook2));
 
-        verify(libraryBookRepository, times(2)).save(captorBook2.capture());
+    }
 
-        //estava pensando em como usar o argumentcaptor para fazer as capturas...
+    @Test
+    @DisplayName("Adicionando o Book 3 ao emprestimo")
+    void shouldAddBook3OnLoan() {
 
+        List<Long> idsBooks = Arrays.asList(1L, 2L, 3L);
+
+        when(libraryBookRepository.existsById(anyLong())).thenReturn(true);
+
+        LibraryBookDTO libraryBookDTO1 = createLibraryBookDTO().build();
+        LibraryBookDTO libraryBookDTO2 = createLibraryBookDTO().id(2L).build();
+        List<LibraryBookDTO> libraryBookDTOList = Arrays.asList(libraryBookDTO1, libraryBookDTO2);
+        when(getAllBookForSpecificIDLoanService.getAllBooksForSpecificId(anyLong())).thenReturn(libraryBookDTOList);
+
+        //novo livro do emprestimo
+        LibraryBook libraryBook3 = createLibraryBook().id(3L).build();
+        when(libraryBookRepository.getOne(eq(3L))).thenReturn(libraryBook3);
+
+        changeIDLoanAndBorrowedBooksService.changeStatusAndBorrowed(ID_LOAN, idsBooks);
+
+        verify(libraryBookRepository, times(3)).existsById(anyLong());
+        verify(libraryBookRepository, times(1)).existsById(eq(idsBooks.get(0)));
+        verify(libraryBookRepository, times(1)).existsById(eq(idsBooks.get(1)));
+        verify(libraryBookRepository, times(1)).existsById(eq(idsBooks.get(2)));
+
+        verify(getAllBookForSpecificIDLoanService, times(1)).getAllBooksForSpecificId(eq(ID_LOAN));
+
+        verify(libraryBookRepository, times(1)).getOne(eq(idsBooks.get(2)));
+        verify(libraryBookRepository, times(1)).getOne(anyLong());
+        verify(libraryBookRepository, times(1)).save(eq(libraryBook3));
+        verify(libraryBookRepository, times(1)).save(any(LibraryBook.class));
+    }
+
+    @Test
+    @DisplayName("Remove o livro 1, deixa o livro 2, e adiciona o livro 3")
+    void shouldRemove1Add3() {
+
+        List<Long> idsBooks = Arrays.asList(2L, 3L);
+
+        when(libraryBookRepository.existsById(anyLong())).thenReturn(true);
+
+        LibraryBookDTO libraryBookDTO1 = createLibraryBookDTO().build();
+        LibraryBookDTO libraryBookDTO2 = createLibraryBookDTO().id(2L).build();
+        List<LibraryBookDTO> libraryBookDTOList = Arrays.asList(libraryBookDTO1, libraryBookDTO2);
+        when(getAllBookForSpecificIDLoanService.getAllBooksForSpecificId(anyLong())).thenReturn(libraryBookDTOList);
+
+        //Esses livros fazem parte do emprestimo e não estão na lista
+        LibraryBook libraryBook1 = LibraryBook.to(libraryBookDTO1);
+        when(libraryBookRepository.getOne(eq(1L))).thenReturn(libraryBook1);
+
+        //novo livro do emprestimo
+        LibraryBook libraryBook3 = createLibraryBook().id(3L).build();
+        when(libraryBookRepository.getOne(eq(3L))).thenReturn(libraryBook3);
+
+        changeIDLoanAndBorrowedBooksService.changeStatusAndBorrowed(ID_LOAN, idsBooks);
+
+        verify(libraryBookRepository, times(2)).existsById(anyLong());
+        verify(libraryBookRepository, times(1)).existsById(eq(idsBooks.get(0)));
+        verify(libraryBookRepository, times(1)).existsById(eq(idsBooks.get(1)));
+
+        verify(getAllBookForSpecificIDLoanService, times(1)).getAllBooksForSpecificId(eq(ID_LOAN));
+
+        verify(libraryBookRepository, times(2)).getOne(anyLong());
+        verify(libraryBookRepository, times(1)).getOne(eq(libraryBookDTO1.getId()));
+        verify(libraryBookRepository, times(1)).getOne(eq(idsBooks.get(1)));
+
+        verify(libraryBookRepository, times(2)).save(any(LibraryBook.class));
+        verify(libraryBookRepository, times(1)).save(eq(libraryBook3));
+        verify(libraryBookRepository, times(1)).save(eq(libraryBook1));
     }
 }

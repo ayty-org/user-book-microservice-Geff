@@ -7,6 +7,7 @@ import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.LibraryBoo
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,8 +23,8 @@ public class ChangeIDLoanAndBorrowedBooksServiceImpl implements ChangeIDLoanAndB
                 throw new LibraryBookNotFoundException();
             }
         }
-
         LibraryBook libraryBook;
+        List<Long> idsBooksOfLoan = new ArrayList<>();
 
         //Pego todos os livros que contem o ID do Loan e vejo se eles estão na lista de idsBooks
         //Caso exista um livro que não esteja na lista de idsBooks seguinifica que foi desvinculado do Loan
@@ -36,16 +37,17 @@ public class ChangeIDLoanAndBorrowedBooksServiceImpl implements ChangeIDLoanAndB
                 libraryBook.setSpecificIDLoan(null);
                 libraryBookRepository.save(libraryBook);
             } else {
-                idsBooks.remove(libraryBookDTO.getId()); //faço isso aqui pra tirar o trabalho do for a baixo, para ele não precisar editar algo do msm jeito
+                idsBooksOfLoan.add(libraryBookDTO.getId()); //faço isso aqui pra tirar o trabalho do for a baixo, para ele não precisar editar algo do msm jeito
             }
         }
-
         //Aqui eu pego os novos livros
         for (Long idBook : idsBooks) {
-            libraryBook = libraryBookRepository.getOne(idBook);
-            libraryBook.setBorrowed(true);
-            libraryBook.setSpecificIDLoan(idLoan);
-            libraryBookRepository.save(libraryBook);
+            if (!idsBooksOfLoan.contains(idBook)){
+                libraryBook = libraryBookRepository.getOne(idBook);
+                libraryBook.setBorrowed(true);
+                libraryBook.setSpecificIDLoan(idLoan);
+                libraryBookRepository.save(libraryBook);
+            }
         }
     }
 }
