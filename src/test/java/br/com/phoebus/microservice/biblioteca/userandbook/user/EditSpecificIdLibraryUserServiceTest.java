@@ -79,4 +79,27 @@ public class EditSpecificIdLibraryUserServiceTest {
         verify(repository, times(1)).findById(ID_EDIT);
         verify(repository, times(0)).save(libraryUser.get());
     }
+
+    @Test
+    @DisplayName("Eddita Specific id para null")
+    void shouldEditSpecificForNull() {
+        Optional<LibraryUser> libraryUser = Optional.of(createLibraryUser().build());
+
+        when(repository.findById(anyLong())).thenReturn(libraryUser);
+
+        editSpecificIdLibraryUserService.editSpecifIdLibraryUser(ID_EDIT, "null");
+
+        ArgumentCaptor<LibraryUser> captorUser = ArgumentCaptor.forClass(LibraryUser.class);
+        verify(repository, times(1)).save(captorUser.capture());
+
+        LibraryUser result = captorUser.getValue();
+
+        assertAll("User",
+                () -> assertThat(result.getSpecificIDLoan(), is(libraryUser.get().getSpecificIDLoan())),
+                () -> assertThat(result.getId(), is(libraryUser.get().getId())),
+                () -> assertThat(result.getAge(), is(libraryUser.get().getAge())),
+                () -> assertThat(result.getName(), is(libraryUser.get().getName())),
+                () -> assertThat(result.getTelephone(), is(libraryUser.get().getTelephone()))
+        );
+    }
 }

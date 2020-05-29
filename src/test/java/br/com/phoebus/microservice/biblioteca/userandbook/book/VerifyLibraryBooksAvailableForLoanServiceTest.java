@@ -102,4 +102,15 @@ public class VerifyLibraryBooksAvailableForLoanServiceTest {
         verify(repository, times(0)).getOne(eq(2L));
         verify(repository, times(1)).getOne(anyLong());
     }
+
+    @Test
+    @DisplayName("Lança uma exceção de book not found com lista de ids vazia")
+    void shouldBookNotFoundBySize0() {
+        List<Long> idsBooks = Arrays.asList();
+
+        assertThrows(LibraryBookNotFoundException.class, () -> verifyLibraryBooksAvailableForLoanService.verifyExistLibraryBooks(idsBooks));
+
+        verify(repository, times(0)).existsById(anyLong());
+        verify(repository, times(0)).getOne(anyLong());
+    }
 }

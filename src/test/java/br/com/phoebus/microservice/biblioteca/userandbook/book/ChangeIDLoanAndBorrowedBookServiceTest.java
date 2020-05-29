@@ -1,5 +1,6 @@
 package br.com.phoebus.microservice.biblioteca.userandbook.book;
 
+import br.com.phoebus.microservice.biblioteca.userandbook.exceptions.LibraryBookNotFoundException;
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.LibraryBook;
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.LibraryBookDTO;
 import br.com.phoebus.microservice.biblioteca.userandbook.librarybook.LibraryBookRepository;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import static br.com.phoebus.microservice.biblioteca.userandbook.book.builders.LibraryBookBuilder.createLibraryBook;
 import static br.com.phoebus.microservice.biblioteca.userandbook.book.builders.LibraryBookDTOBuilder.createLibraryBookDTO;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
@@ -147,5 +149,22 @@ public class ChangeIDLoanAndBorrowedBookServiceTest {
         verify(libraryBookRepository, times(2)).save(any(LibraryBook.class));
         verify(libraryBookRepository, times(1)).save(eq(libraryBook3));
         verify(libraryBookRepository, times(1)).save(eq(libraryBook1));
+    }
+
+    @Test
+    @DisplayName("Lança uma exceção de que os livros não existem")
+    void shouldExceptionBookNotFound() {
+
+        List<Long> idsBooks = Arrays.asList(2L, 3L);
+
+        when(libraryBookRepository.existsById(anyLong())).thenReturn(false);
+
+        assertThrows(LibraryBookNotFoundException.class, () -> changeIDLoanAndBorrowedBooksService.changeStatusAndBorrowed(ID_LOAN, idsBooks));
+
+        verify(libraryBookRepository, times(1)).existsById(anyLong());
+
+        verify(getAllBookForSpecificIDLoanService, times(0)).getAllBooksForSpecificId(anyLong());
+        verify(libraryBookRepository, times(0)).getOne(anyLong());
+        verify(libraryBookRepository, times(0)).save(any(LibraryBook.class));
     }
 }

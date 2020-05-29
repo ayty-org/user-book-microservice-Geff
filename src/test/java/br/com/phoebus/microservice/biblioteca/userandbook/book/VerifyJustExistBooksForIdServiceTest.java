@@ -65,4 +65,14 @@ public class VerifyJustExistBooksForIdServiceTest {
         verify(repository, times(1)).existsById(eq(2L));
         verify(repository, times(0)).existsById(eq(3L));
     }
+
+    @Test
+    @DisplayName("Lança exceção de book not foun com lista de ids vazia")
+    void shouldBookNotFoundBySize0() {
+        List<Long> idsBooks = Arrays.asList();
+
+        assertThrows(LibraryBookNotFoundException.class, () -> verifyJustExistBooksForIdService.verifyJustExistBooksForId(idsBooks));
+
+        verify(repository, times(0)).existsById(anyLong());
+    }
 }
